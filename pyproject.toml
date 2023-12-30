@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "learn-antlr"
+version = "0.1.0"
+description = "learn the antlr tool set"
+authors = ["brian moore <datastx@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+antlr4-python3-runtime = "^4.13.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+flake8 = "^6.1.0"
+black = "^23.12.1"
+isort = "^5.13.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
