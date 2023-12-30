@@ -1,0 +1,5 @@
+HELLO=1
+NAME=2
+WHITESPACE=3
+'Hello'=1
+' '=3
