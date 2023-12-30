@@ -10,8 +10,8 @@ else:
 
 def serializedATN():
     return [
-        4,1,3,7,2,0,7,0,1,0,1,0,1,0,1,0,1,0,0,0,1,0,0,0,5,0,2,1,0,0,0,2,
-        3,5,1,0,0,3,4,5,3,0,0,4,5,5,2,0,0,5,1,1,0,0,0,0
+        4,1,4,7,2,0,7,0,1,0,1,0,1,0,1,0,1,0,0,0,1,0,0,1,1,0,1,2,5,0,2,1,
+        0,0,0,2,3,5,3,0,0,3,4,7,0,0,0,4,5,5,3,0,0,5,1,1,0,0,0,0
     ]
 
 class HelloParser ( Parser ):
@@ -24,18 +24,19 @@ class HelloParser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "'Hello'", "<INVALID>", "' '" ]
+    literalNames = [ "<INVALID>", "'+'", "'-'" ]
 
-    symbolicNames = [ "<INVALID>", "HELLO", "NAME", "WHITESPACE" ]
+    symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "NUMBER", "WHITESPACE" ]
 
-    RULE_greeting = 0
+    RULE_operation = 0
 
-    ruleNames =  [ "greeting" ]
+    ruleNames =  [ "operation" ]
 
     EOF = Token.EOF
-    HELLO=1
-    NAME=2
-    WHITESPACE=3
+    T__0=1
+    T__1=2
+    NUMBER=3
+    WHITESPACE=4
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -46,46 +47,49 @@ class HelloParser ( Parser ):
 
 
 
-    class GreetingContext(ParserRuleContext):
+    class OperationContext(ParserRuleContext):
         __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def HELLO(self):
-            return self.getToken(HelloParser.HELLO, 0)
-
-        def WHITESPACE(self):
-            return self.getToken(HelloParser.WHITESPACE, 0)
-
-        def NAME(self):
-            return self.getToken(HelloParser.NAME, 0)
+        def NUMBER(self, i:int=None):
+            if i is None:
+                return self.getTokens(HelloParser.NUMBER)
+            else:
+                return self.getToken(HelloParser.NUMBER, i)
 
         def getRuleIndex(self):
-            return HelloParser.RULE_greeting
+            return HelloParser.RULE_operation
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitGreeting" ):
-                return visitor.visitGreeting(self)
+            if hasattr( visitor, "visitOperation" ):
+                return visitor.visitOperation(self)
             else:
                 return visitor.visitChildren(self)
 
 
 
 
-    def greeting(self):
+    def operation(self):
 
-        localctx = HelloParser.GreetingContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 0, self.RULE_greeting)
+        localctx = HelloParser.OperationContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 0, self.RULE_operation)
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 2
-            self.match(HelloParser.HELLO)
+            self.match(HelloParser.NUMBER)
             self.state = 3
-            self.match(HelloParser.WHITESPACE)
+            _la = self._input.LA(1)
+            if not(_la==1 or _la==2):
+                self._errHandler.recoverInline(self)
+            else:
+                self._errHandler.reportMatch(self)
+                self.consume()
             self.state = 4
-            self.match(HelloParser.NAME)
+            self.match(HelloParser.NUMBER)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
