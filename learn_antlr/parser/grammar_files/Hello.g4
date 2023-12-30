@@ -1,6 +1,6 @@
 grammar Hello;
 
-HELLO: 'Hello';
-NAME: [a-zA-Z]+;
-WHITESPACE: ' ';
-greeting: HELLO WHITESPACE NAME;
+NUMBER: [0-9]+;
+WHITESPACE: [ \t\r\n]+ -> skip;
+
+start: NUMBER ('+' | '-') NUMBER;
