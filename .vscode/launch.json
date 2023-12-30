@@ -9,7 +9,7 @@
             "grammar": "learn_antlr/parser/grammar_files/Hello.g4",
             "startRule": "start",
             "printParseTree": true,
-            "visualParseTree": false
+            "visualParseTree": true
         }
     ]
 }

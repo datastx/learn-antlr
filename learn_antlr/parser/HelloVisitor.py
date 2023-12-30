@@ -9,8 +9,8 @@ else:
 
 class HelloVisitor(ParseTreeVisitor):
 
-    # Visit a parse tree produced by HelloParser#operation.
-    def visitOperation(self, ctx:HelloParser.OperationContext):
+    # Visit a parse tree produced by HelloParser#start.
+    def visitStart(self, ctx:HelloParser.StartContext):
         return self.visitChildren(ctx)
 
 

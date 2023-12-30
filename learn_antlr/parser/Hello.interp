@@ -13,7 +13,7 @@ NUMBER
 WHITESPACE
 
 rule names:
-operation
+start
 
 
 atn:

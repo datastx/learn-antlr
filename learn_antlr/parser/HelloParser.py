@@ -28,9 +28,9 @@ class HelloParser ( Parser ):
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "NUMBER", "WHITESPACE" ]
 
-    RULE_operation = 0
+    RULE_start = 0
 
-    ruleNames =  [ "operation" ]
+    ruleNames =  [ "start" ]
 
     EOF = Token.EOF
     T__0=1
@@ -47,7 +47,7 @@ class HelloParser ( Parser ):
 
 
 
-    class OperationContext(ParserRuleContext):
+    class StartContext(ParserRuleContext):
         __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -61,21 +61,21 @@ class HelloParser ( Parser ):
                 return self.getToken(HelloParser.NUMBER, i)
 
         def getRuleIndex(self):
-            return HelloParser.RULE_operation
+            return HelloParser.RULE_start
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitOperation" ):
-                return visitor.visitOperation(self)
+            if hasattr( visitor, "visitStart" ):
+                return visitor.visitStart(self)
             else:
                 return visitor.visitChildren(self)
 
 
 
 
-    def operation(self):
+    def start(self):
 
-        localctx = HelloParser.OperationContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 0, self.RULE_operation)
+        localctx = HelloParser.StartContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 0, self.RULE_start)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
