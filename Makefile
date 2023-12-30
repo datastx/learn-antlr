@@ -41,7 +41,7 @@ create-venv: ## Create a new virtual environment
 	@echo "Environment renewal complete."
 
 .PHONY: re-venv
-re-venv: delete-venv create-venv ## Delete and recreate the virtual environment
+re-venv: delete-venv create-venv install-java ## Deletes and rebuilds the venv along with the java runtime
 
 
 .PHONY: clean
@@ -62,8 +62,21 @@ test: check-poetry ## Run tests
 
 .PHONY: prod-requirements
 prod-requirements: check-poetry ## Generate production requirements
-	poetry add antlr4-python3-runtime
+	poetry add antlr4-python3-runtime antlr4-tools
 
 .PHONY: dev-requirements
 dev-requirements: check-poetry ## Generate development requirements
 	poetry add --dev flake8 black isort pytest
+
+
+.PHONY: check-brew
+check-brew: ## Check if Homebrew is installed, if not install it
+	@echo "Checking for Homebrew..."
+	@which brew > /dev/null || { echo "Installing Homebrew..."; /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; }
+
+.PHONY: install-java
+install-java: check-brew ## Install the latest Java Runtime Environment on macOS
+	@echo "Installing Java Runtime Environment..."
+	brew tap homebrew/cask-versions
+	brew install --cask temurin
+	@echo "Java installation completed."
