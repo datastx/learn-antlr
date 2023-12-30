@@ -1,5 +1,7 @@
-
+REPO=$(shell pwd)
 VENV_NAME?=.venv
+LINT_TARGETS?=learn_antlr tests
+LINTERS=flake8 black isort pylint mypy
 
 .PHONY: check-poetry
 check-poetry: ## Check if poetry is installed
@@ -16,11 +18,8 @@ configure-poetry: check-poetry ## Configure poetry
 .PHONY: setup-project
 setup-project: download-poetry configure-poetry re-venv ## Setup the project
 
-
 update-poetry: check-poetry ## Update poetry to the latest version
 	poetry self update
-
-
 
 .PHONY: delete-venv
 delete-venv: ## Delete the virtual environment
@@ -43,7 +42,6 @@ create-venv: ## Create a new virtual environment
 .PHONY: re-venv
 re-venv: delete-venv create-venv install-java ## Deletes and rebuilds the venv along with the java runtime
 
-
 .PHONY: clean
 clean: ## Clean the project directory
 	find . -type f -name '*.pyc' -delete
@@ -51,14 +49,14 @@ clean: ## Clean the project directory
 
 .PHONY: lint
 lint: check-poetry ## Lint and format the code
-	poetry run flake8 learn_antlr tests
-	poetry run black learn_antlr tests
-	poetry run isort learn_antlr tests
+	@for linter in $(LINTERS); do \
+		echo "Running $$linter on $(LINT_TARGETS)..."; \
+		poetry run $$linter $(LINT_TARGETS); \
+	done
 
 .PHONY: test
 test: check-poetry ## Run tests
 	poetry run pytest
-
 
 .PHONY: prod-requirements
 prod-requirements: check-poetry ## Generate production requirements
@@ -66,8 +64,7 @@ prod-requirements: check-poetry ## Generate production requirements
 
 .PHONY: dev-requirements
 dev-requirements: check-poetry ## Generate development requirements
-	poetry add --dev flake8 black isort pytest
-
+	poetry add --dev flake8 black isort pytest pylint mypy
 
 .PHONY: check-brew
 check-brew: ## Check if Homebrew is installed, if not install it
@@ -80,3 +77,9 @@ install-java: check-brew ## Install the latest Java Runtime Environment on macOS
 	brew tap homebrew/cask-versions
 	brew install --cask temurin
 	@echo "Java installation completed."
+
+.PHONY: compile-grammar
+compile-grammar: ## Compile the grammar
+	@echo "Compiling the grammar..."
+	poetry run antlr4 -Dlanguage=Python3 -visitor -no-listener -o $(REPO)/learn_antlr/parser $(REPO)/learn_antlr/parser/grammar_files/Hello.g4
+	@echo "Grammar compilation completed."
